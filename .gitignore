@@ -1,0 +1,6 @@
+
+.terraform
+*.tfvars
+*.tfstate*
+.roles
+key.pub
