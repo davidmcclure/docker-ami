@@ -35,15 +35,15 @@
         update_cache: yes
         name: awscli
 
-    # - name: Create AMI
-    #   become: no
-    #   register: ami
-    #   local_action:
-    #     module: ec2_ami
-    #     instance_id: '{{ tf_instance_id }}'
-    #     name: '{{ ami_name }}'
-    #     region: '{{ tf_aws_region }}'
-    #     wait: yes
-    #
-    # - debug:
-    #     var: ami.image_id
+    - name: Create AMI
+      become: no
+      register: ami
+      local_action:
+        module: ec2_ami
+        instance_id: '{{ tf_instance_id }}'
+        name: '{{ ami_name }}'
+        region: '{{ tf_aws_region }}'
+        wait: yes
+
+    - debug:
+        var: ami.image_id
