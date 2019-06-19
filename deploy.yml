@@ -17,11 +17,6 @@
     - name: Gather facts, after SSH
       setup:
 
-    - name: Install awscli
-      apt:
-        update_cache: yes
-        name: awscli
-
     - name: Install Docker
       include_role:
         name: geerlingguy.docker
@@ -33,6 +28,12 @@
         pip_package: python3-pip
         pip_install_packages:
           - name: docker
+
+    # For ECR image pulls.
+    - name: Install awscli
+      apt:
+        update_cache: yes
+        name: awscli
 
     # - name: Create AMI
     #   become: no
