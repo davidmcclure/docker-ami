@@ -1,23 +1,16 @@
-module "vpc" {
-  source                = "github.com/davidmcclure/tf-aws-vpc"
-  name                  = "${var.name}"
-  aws_region            = "${var.aws_region}"
-  aws_availability_zone = "${var.aws_availability_zone}"
-}
-
 provider "aws" {
-  region = "${module.vpc.aws_region}"
+  region = var.aws_region
 }
 
 resource "aws_key_pair" "docker" {
-  key_name   = "${var.name}"
-  public_key = "${file("./key.pub")}"
+  key_name   = var.name
+  public_key = file("./key.pub")
 }
 
 resource "aws_security_group" "docker" {
-  name        = "${var.name}"
+  name        = var.name
   description = "Docker AMI"
-  vpc_id      = "${module.vpc.vpc_id}"
+  vpc_id      = var.vpc_id
 
   ingress {
     from_port   = 22
@@ -40,35 +33,35 @@ resource "aws_security_group" "docker" {
     protocol    = "tcp"
   }
 
-  tags {
-    Name = "${var.name}"
+  tags = {
+    Name = var.name
   }
 }
 
 resource "aws_instance" "docker" {
-  ami                         = "${var.base_ami}"
-  instance_type               = "${var.instance_type}"
-  subnet_id                   = "${module.vpc.subnet_id}"
-  vpc_security_group_ids      = ["${aws_security_group.docker.id}"]
-  key_name                    = "${aws_key_pair.docker.key_name}"
+  ami                         = var.base_ami
+  instance_type               = var.instance_type
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = [aws_security_group.docker.id]
+  key_name                    = aws_key_pair.docker.key_name
   associate_public_ip_address = true
 
-  tags {
-    Name = "${var.name}"
+  tags = {
+    Name = var.name
   }
 }
 
 data "template_file" "inventory" {
-  template = "${file("${path.module}/inventory.tpl")}"
+  template = file("${path.module}/inventory.tpl")
 
-  vars {
-    public_ip   = "${aws_instance.docker.public_ip}"
-    instance_id = "${aws_instance.docker.id}"
-    aws_region  = "${module.vpc.aws_region}"
+  vars = {
+    public_ip   = aws_instance.docker.public_ip
+    instance_id = aws_instance.docker.id
+    aws_region  = var.aws_region
   }
 }
 
 resource "local_file" "inventory" {
-  content  = "${data.template_file.inventory.rendered}"
+  content  = data.template_file.inventory.rendered
   filename = "${path.module}/.inventory"
 }

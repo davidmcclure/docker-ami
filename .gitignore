@@ -4,3 +4,4 @@
 *.tfstate*
 .roles
 key.pub
+.inventory

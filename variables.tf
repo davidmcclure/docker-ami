@@ -18,3 +18,11 @@ variable "base_ami" {
 variable "instance_type" {
   default = "t2.micro"
 }
+
+variable "vpc_id" {
+  type = "string"
+}
+
+variable "subnet_id" {
+  type = "string"
+}
