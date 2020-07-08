@@ -5,7 +5,7 @@ This repository automates the process of building a base Docker AMI on EC2.
 
 Terraform is used to create the sandbox instance on EC2; then Ansible is used to install Docker and create the AMI.
 
-## Setup
+## Usage
 
 1. On the host machine, install:
 
