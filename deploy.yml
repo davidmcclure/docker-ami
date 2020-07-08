@@ -17,6 +17,10 @@
     - name: Gather facts, after SSH
       setup:
 
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
     - name: Install Docker
       include_role:
         name: geerlingguy.docker
@@ -32,7 +36,6 @@
     # For ECR image pulls.
     - name: Install awscli
       apt:
-        update_cache: yes
         name: awscli
 
     - name: Create AMI

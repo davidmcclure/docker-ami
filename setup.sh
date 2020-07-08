@@ -1,5 +1,5 @@
 #!/bin/sh
 
-pipenv install
+poetry install
+poetry run ansible-galaxy install -r requirements.yml
 terraform init
-pipenv run ansible-galaxy install -r roles.yml

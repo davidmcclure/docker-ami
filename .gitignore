@@ -3,5 +3,4 @@
 *.tfvars
 *.tfstate*
 .roles
-key.pub
-.inventory
+inventory

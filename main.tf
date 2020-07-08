@@ -3,12 +3,10 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "docker" {
-  key_name   = var.name
-  public_key = file("./key.pub")
+  public_key = file(var.public_key_path)
 }
 
 resource "aws_security_group" "docker" {
-  name        = var.name
   description = "Docker AMI"
   vpc_id      = var.vpc_id
 
@@ -32,10 +30,6 @@ resource "aws_security_group" "docker" {
     cidr_blocks = ["0.0.0.0/0"]
     protocol    = "tcp"
   }
-
-  tags = {
-    Name = var.name
-  }
 }
 
 resource "aws_instance" "docker" {
@@ -45,10 +39,6 @@ resource "aws_instance" "docker" {
   vpc_security_group_ids      = [aws_security_group.docker.id]
   key_name                    = aws_key_pair.docker.key_name
   associate_public_ip_address = true
-
-  tags = {
-    Name = var.name
-  }
 }
 
 data "template_file" "inventory" {
@@ -63,5 +53,5 @@ data "template_file" "inventory" {
 
 resource "local_file" "inventory" {
   content  = data.template_file.inventory.rendered
-  filename = "${path.module}/.inventory"
+  filename = "${path.module}/inventory"
 }
