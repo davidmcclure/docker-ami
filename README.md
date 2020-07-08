@@ -1,7 +1,7 @@
 
 # Docker AMI
 
-This repository automates the process of building a base Docker AMI on EC2. (Building on Ubuntu 18.4, `ami-0ac80df6eff0e70b5`.)
+This repository automates the process of building a base Docker AMI on EC2 (Ubuntu 18.4).
 
 Terraform is used to create the sandbox instance on EC2; then Ansible is used to install Docker and create the AMI.
 
